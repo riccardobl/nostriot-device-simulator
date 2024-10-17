@@ -1,7 +1,8 @@
+import { PluginConfig } from "../../types.ts";
 export default class RunMotor {
-    config: Record<string, unknown>;
+    config: PluginConfig;
 
-    constructor(config: Record<string, unknown>) {
+    constructor(config: PluginConfig) {
         this.config = config;
     }
 

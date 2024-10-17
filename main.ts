@@ -1,11 +1,11 @@
-// Function to read and parse JSON files
-async function readJsonFile(filePath: string) {
-    const text = await Deno.readTextFile(filePath);
+import { AppConfig, PluginConfig } from "./types.ts";
+
+async function getAppConfig(filePath: string) {
+    const text = await Deno.readTextFile<AppConfig>(filePath);
     return JSON.parse(text);
 }
 
-// Define a flexible type for plugin configuration
-async function loadPlugin(pluginPath: string, config: Record<string, unknown>) {
+async function loadPlugin(pluginPath: string, config: PluginConfig) {
     const pluginModule = await import(pluginPath);
     const PluginClass = pluginModule.default;
     const pluginInstance = new PluginClass(config);
@@ -13,15 +13,14 @@ async function loadPlugin(pluginPath: string, config: Record<string, unknown>) {
     return pluginInstance;
 }
 
-async function loadPlugins() {
-    const config = await readJsonFile("./config.json");
+async function loadPlugins(config: AppConfig) {
     const pluginsConfig = config.plugins;
 
     const loadedPlugins = [];
 
     for (const pluginInfo of pluginsConfig) {
         const pluginConfigPath = `./plugins/${pluginInfo.name}/config.json`;
-        const pluginConfig = await readJsonFile(pluginConfigPath);
+        const pluginConfig = await getAppConfig<PluginConfig>(pluginConfigPath);
 
         const plugin = await loadPlugin(pluginInfo.path, pluginConfig);
 
@@ -34,7 +33,9 @@ async function loadPlugins() {
 }
 
 (async () => {
-    const plugins = await loadPlugins();
+    const config = await getAppConfig<AppConfig>("./config.json");
+    const plugins = await loadPlugins(config);
+    console.log(config.privatekey);
 
     for (const plugin of plugins) {
         for (const capability of plugin.getCapabilities()) {
