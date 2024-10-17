@@ -53,6 +53,3 @@ Deno.test("Run Motor Plugin", async () => {
   const expected = JSON.stringify(motorParams);
   assertEquals(runMotor.execute(motorParams), expected);
 });
-
-// Cleanup if necessary
-// Deno.removeSync("./tests.config.json");
