@@ -7,6 +7,7 @@ import { AppConfig } from "../types.ts";
 const mockConfig: AppConfig = {
   privateKey:
     "5d5fec0a282be86b3fb8a0d6196685ab2654ea2ffdd47b395b05cdaca45d52fe",
+  relays: ["wss://relay.nostriot.com"],
   plugins: [
     { name: "temperature", path: "./plugins/temperature/main.ts" },
     { name: "run-motor", path: "./plugins/run-motor/main.ts" },
