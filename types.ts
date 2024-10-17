@@ -4,6 +4,7 @@ export interface PluginInfo {
 }
 
 export interface AppConfig {
+    privatekey: string;
     plugins: PluginInfo[];
 }
 

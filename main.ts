@@ -1,8 +1,8 @@
 import { AppConfig, PluginConfig } from "./types.ts";
 
-async function getAppConfig(filePath: string) {
-    const text = await Deno.readTextFile<AppConfig>(filePath);
-    return JSON.parse(text);
+async function getAppConfig(filePath: string): Promise<AppConfig> {
+    const text = await Deno.readTextFile(filePath);
+    return JSON.parse(text) as AppConfig;
 }
 
 async function loadPlugin(pluginPath: string, config: PluginConfig) {
@@ -20,7 +20,7 @@ async function loadPlugins(config: AppConfig) {
 
     for (const pluginInfo of pluginsConfig) {
         const pluginConfigPath = `./plugins/${pluginInfo.name}/config.json`;
-        const pluginConfig = await getAppConfig<PluginConfig>(pluginConfigPath);
+        const pluginConfig = await getAppConfig(pluginConfigPath) as PluginConfig;
 
         const plugin = await loadPlugin(pluginInfo.path, pluginConfig);
 
@@ -33,7 +33,7 @@ async function loadPlugins(config: AppConfig) {
 }
 
 (async () => {
-    const config = await getAppConfig<AppConfig>("./config.json");
+    const config = await getAppConfig("./config.json") as AppConfig;
     const plugins = await loadPlugins(config);
     console.log(config.privatekey);
 
