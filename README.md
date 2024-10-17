@@ -154,3 +154,11 @@ plugin.execute(motorParams);
   plugin's main TypeScript file.
 - If your plugin requires configuration, ensure the `config.json` in the plugin
   directory contains valid JSON.
+
+# Tests
+
+Run the deno test suite with:
+
+```bash
+deno test --allow-write --allow-read
+```
