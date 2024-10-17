@@ -1,4 +1,5 @@
 {
+  "privatekey": "[PRIVATE_KEY_HEX]",
   "plugins": [
     { "name": "temperature", "path": "./plugins/temperature/main.ts" },
     { "name": "run-motor", "path": "./plugins/run-motor/main.ts" }
