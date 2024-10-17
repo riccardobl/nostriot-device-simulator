@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    { "name": "temperature", "path": "./plugins/temperature/main.ts" },
+    { "name": "run-motor", "path": "./plugins/run-motor/main.ts" }
+  ]
+}
