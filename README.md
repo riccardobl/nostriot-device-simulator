@@ -35,8 +35,8 @@ To add a new plugin to the system, follow these steps:
 
 2. **Plugin Interface**: The plugin must implement a few basic methods to
    integrate smoothly with the system:
-   - **`getCapabilities(): string[]`**: Returns a list of capabilities that the
-     plugin provides.
+   - **`getCapability(): string`**: Returns a string describing the capability
+     of the plugin. plugin provides.
    - **`execute(params: (string | number)[]): string`**: Executes the
      functionality of the plugin based on input parameters and returns a result
      (as a string).
@@ -60,8 +60,8 @@ export default class MyPlugin {
     this.config = config;
   }
 
-  getCapabilities(): string[] {
-    return ["myCustomCapability"];
+  getCapability(): string {
+    return "myCustomCapability";
   }
 
   execute(params: (string | number)[] = []): string {
@@ -107,15 +107,15 @@ Example update to `config.json`:
 
 #### Step 4: Define the Plugin's Capabilities
 
-When the system loads your plugin, it will call the `getCapabilities()` method.
-Define any capabilities that your plugin provides, which will be used to call
-the correct functionality.
+When the system loads your plugin, it will call the `getCapability()` method.
+Define the capability that your plugin provides, which will be used to call the
+correct functionality.
 
 For example, if your plugin provides a motor control capability:
 
 ```typescript
-getCapabilities(): string[] {
-    return ["runMotor"];
+getCapability(): string {
+    return "runMotor";
 }
 ```
 

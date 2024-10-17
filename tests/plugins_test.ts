@@ -29,7 +29,7 @@ Deno.test("Load Plugins", async () => {
   const plugins = await loadPlugins(config);
   assertEquals(plugins.length, config.plugins.length);
   assert(
-    plugins.every((plugin) => typeof plugin.getCapabilities === "function"),
+    plugins.every((plugin) => typeof plugin.getCapability === "function"),
   );
 });
 
@@ -40,7 +40,7 @@ Deno.test("Temperature Sensor Plugin", async () => {
     p.constructor.name === "TemperatureSensor"
   );
   assert(tempSensor);
-  assertEquals(tempSensor.getCapabilities(), ["getTemperature"]);
+  assertEquals(tempSensor.getCapability(), "getTemperature");
   assert(typeof tempSensor.execute() === "number");
 });
 
@@ -49,7 +49,7 @@ Deno.test("Run Motor Plugin", async () => {
   const plugins = await loadPlugins(config);
   const runMotor = plugins.find((p) => p.constructor.name === "RunMotor");
   assert(runMotor);
-  assertEquals(runMotor.getCapabilities(), ["runMotor"]);
+  assertEquals(runMotor.getCapability(), "runMotor");
   const motorParams = ["value", "2", "unit", "seconds"];
   const expected = JSON.stringify(motorParams);
   assertEquals(runMotor.execute(motorParams), expected);

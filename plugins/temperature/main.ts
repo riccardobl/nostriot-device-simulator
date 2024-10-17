@@ -6,8 +6,16 @@ export default class TemperatureSensor {
     this.config = config;
   }
 
-  getCapabilities(): string[] {
-    return ["getTemperature"];
+  getCapability(): string {
+    return "getTemperature";
+  }
+
+  getType(): string {
+    return "temperature";
+  }
+
+  getUnit(): string {
+    return "celsius";
   }
 
   execute(): number {

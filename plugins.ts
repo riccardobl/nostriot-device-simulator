@@ -21,7 +21,7 @@ export async function loadPlugins(config: AppConfig) {
     const plugin = await loadPlugin(pluginInfo.path, pluginConfig);
 
     console.log(
-      `${pluginInfo.name} capabilities: ${plugin.getCapabilities().join(", ")}`,
+      `${pluginInfo.name} capability: ${plugin.getCapability()}`,
     );
 
     loadedPlugins.push(plugin);

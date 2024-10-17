@@ -6,8 +6,16 @@ export default class RunMotor {
     this.config = config;
   }
 
-  getCapabilities(): string[] {
-    return ["runMotor"];
+  getCapability(): string {
+    return "runMotor";
+  }
+
+  getType(): string {
+    return "duration";
+  }
+
+  getUnit(): string {
+    return "seconds";
   }
 
   execute(params: (string | number)[] = []): string {
