@@ -1,39 +1,9 @@
-import { AppConfig, PluginConfig } from "./types.ts";
-
-async function getAppConfig(filePath: string): Promise<AppConfig> {
-    const text = await Deno.readTextFile(filePath);
-    return JSON.parse(text) as AppConfig;
-}
-
-async function loadPlugin(pluginPath: string, config: PluginConfig) {
-    const pluginModule = await import(pluginPath);
-    const PluginClass = pluginModule.default;
-    const pluginInstance = new PluginClass(config);
-
-    return pluginInstance;
-}
-
-async function loadPlugins(config: AppConfig) {
-    const pluginsConfig = config.plugins;
-
-    const loadedPlugins = [];
-
-    for (const pluginInfo of pluginsConfig) {
-        const pluginConfigPath = `./plugins/${pluginInfo.name}/config.json`;
-        const pluginConfig = await getAppConfig(pluginConfigPath) as PluginConfig;
-
-        const plugin = await loadPlugin(pluginInfo.path, pluginConfig);
-
-        console.log(`${pluginInfo.name} capabilities: ${plugin.getCapabilities().join(", ")}`);
-
-        loadedPlugins.push(plugin);
-    }
-
-    return loadedPlugins;
-}
+import { AppConfig } from "./types.ts";
+import {loadConfigFile} from "./config.ts";
+import {loadPlugins} from "./plugins.ts";
 
 (async () => {
-    const config = await getAppConfig("./config.json") as AppConfig;
+    const config = await loadConfigFile("./config.json") as AppConfig;
     const plugins = await loadPlugins(config);
     console.log(config.privateKey);
 
