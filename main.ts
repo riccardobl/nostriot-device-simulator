@@ -35,7 +35,7 @@ async function loadPlugins(config: AppConfig) {
 (async () => {
     const config = await getAppConfig("./config.json") as AppConfig;
     const plugins = await loadPlugins(config);
-    console.log(config.privatekey);
+    console.log(config.privateKey);
 
     for (const plugin of plugins) {
         for (const capability of plugin.getCapabilities()) {
