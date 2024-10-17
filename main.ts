@@ -43,7 +43,7 @@ async function loadPlugins(config: AppConfig) {
             switch (capability) {
                 case "runMotor":
                 {
-                    const motorParams = ["value", "20", "unit","celcius"];
+                    const motorParams = ["value", "2", "unit","seconds"];
                     console.log(`Executing plugin: ${plugin.execute(motorParams)}`);
                     break;
                 }
