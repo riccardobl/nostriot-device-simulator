@@ -1,17 +1,17 @@
 import { PluginConfig } from "../../types.ts";
 export default class TemperatureSensor {
-    config: PluginConfig;
+  config: PluginConfig;
 
-    constructor(config: PluginConfig) {
-        this.config = config;
-    }
+  constructor(config: PluginConfig) {
+    this.config = config;
+  }
 
-    getCapabilities(): string[] {
-        return ["getTemperature"];
-    }
+  getCapabilities(): string[] {
+    return ["getTemperature"];
+  }
 
-    execute(): number {
-        const temp = Math.random() * 100
-        return Math.round(temp * 100) / 100;
-    }
+  execute(): number {
+    const temp = Math.random() * 100;
+    return Math.round(temp * 100) / 100;
+  }
 }

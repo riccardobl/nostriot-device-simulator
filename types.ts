@@ -1,14 +1,14 @@
 export interface PluginInfo {
-    name: string;
-    path: string;
+  name: string;
+  path: string;
 }
 
 export interface AppConfig {
-    privateKey: string;
-    plugins: PluginInfo[];
+  privateKey: string;
+  plugins: PluginInfo[];
 }
 
 export interface PluginConfig {
-    unit?: string;
-    threshold?: number;
+  unit?: string;
+  threshold?: number;
 }
