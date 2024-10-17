@@ -13,22 +13,21 @@ import { loadPlugins } from "./plugins.ts";
   const pk = getPublicKey(sk);
 
   const pool = new SimplePool();
-  // await Promise.any(pool.publish(appConfig.relays, signedEvent))
-  // console.log('Published service announcement event');
 
+  // for each plugin, publish a service announcement event for the plugin's capability
   for (const plugin of plugins) {
     const capability = plugin.getCapability();
-    console.log(
-      `Plugin ${plugin.constructor.name} has capability: ${capability}`,
-    );
+    const pluginDataType = plugin.getType();
+    const pluginUnit = plugin.getUnit();
     const serviceAnnouncementEvent = getServiceAnnouncementEvent(
       `A thing with capability: ${capability}`,
       "A simulated IoT DVM",
       5107,
-      ["temperature", "unit", "celsius"],
+      [pluginDataType, "unit", pluginUnit],
     );
     const signedEvent = finalizeEvent(serviceAnnouncementEvent, sk);
-    // console.log('publishing service announcement event...', signedEvent);
+    console.log("publishing service announcement event...", signedEvent);
+    await Promise.any(pool.publish(appConfig.relays, signedEvent));
 
     // switch (capability) {
     //   case "runMotor": {
