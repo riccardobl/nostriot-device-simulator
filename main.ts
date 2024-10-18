@@ -8,10 +8,10 @@ import {
 import { hexToBytes } from "npm:@noble/hashes/utils";
 import { loadConfigFile } from "./config.ts";
 import {
-  getJobRequestInputData,
+  getJobRequestInputTag,
   getJobResultEvent,
   getServiceAnnouncementEvent,
-  JobRequestInputData,
+  JobRequestInputTag,
 } from "./nostr/dvm.ts";
 import { AppConfig } from "./types.ts";
 import { getPlugins } from "./plugins.ts";
@@ -43,33 +43,30 @@ for (const plugin of plugins) {
  * @param event
  */
 const handleJobRequest = async (event: VerifiedEvent) => {
-  const jobRequestInputData: JobRequestInputData = getJobRequestInputData(
-    event,
-  );
-  const iTagParams = event.tags[0][1];
-  const dvmRequestParams = JSON.parse(iTagParams);
-  console.log(`Received job request for: ${dvmRequestParams[0].method}`);
+  const jobRequestInputData: JobRequestInputTag = getJobRequestInputTag(event);
 
-  switch (dvmRequestParams[0].method) {
+  console.log(`Received job request for: ${jobRequestInputData.method}`);
+
+  switch (jobRequestInputData.method) {
     case "getTemperature": {
       console.log("Handling getTemperature request");
       const temp = plugins.get("temperature").execute();
-      const jobResult = getJobResultEvent(event, JSON.stringify(temp));
+      const jobResult = getJobResultEvent(event, temp.toString());
       const signedEvent = finalizeEvent(jobResult, sk);
       await Promise.any(pool.publish(appConfig.relays, signedEvent));
       break;
     }
     case "runMotor": {
       console.log("Handling runMotor request");
-      const speed = dvmRequestParams[0].params[0];
-      const result = plugins.get("motor").execute([speed]);
-      const jobResult = getJobResultEvent(event, JSON.stringify(result));
+      const params = jobRequestInputData.params;
+      const runDuration = params.value;
+      const result = plugins.get("run-motor").execute(runDuration);
+      const jobResult = getJobResultEvent(event, result);
       const signedEvent = finalizeEvent(jobResult, sk);
       await Promise.any(pool.publish(appConfig.relays, signedEvent));
-      break;
     }
     default:
-      console.log("Unknown method");
+      console.log("Unknown method", jobRequestInputData.method);
   }
 };
 

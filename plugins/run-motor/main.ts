@@ -26,8 +26,8 @@ export default class RunMotor {
     return this.config.serviceAnnouncementTags || {};
   }
 
-  execute(params: (string | number)[] = []): string {
+  execute(runDuration: (string | number)[] = []): string {
     // Stringify params and return
-    return JSON.stringify(params);
+    return `Motor running for ${runDuration} seconds`;
   }
 }

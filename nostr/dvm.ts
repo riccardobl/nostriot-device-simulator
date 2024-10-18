@@ -1,4 +1,5 @@
 import { EventTemplate, VerifiedEvent } from "npm:nostr-tools";
+import { arrayToKeyedObject } from "../utils.ts";
 
 export function getServiceAnnouncementEvent(
   name: string,
@@ -22,33 +23,81 @@ export function getServiceAnnouncementEvent(
   };
 }
 
-export interface JobRequestInputData {
-  data: string;
-  inputType: string;
-  relay: string;
+export class JobRequestInputTag {
+  private _data: string;
+  private _inputType: string;
+  private _relay: string;
+
+  constructor(data: string, inputType: string, relay: string) {
+    this._data = data;
+    this._inputType = inputType;
+    this._relay = relay;
+  }
+
+  get method(): string {
+    const dataObj = JSON.parse(this._data);
+    return dataObj[0].method;
+  }
+
+  get params(): any {
+    const dataObj = JSON.parse(this._data);
+    const params = arrayToKeyedObject(dataObj[0].params);
+    return params;
+  }
+
+  // Getter for data
+  get data(): string {
+    return this._data;
+  }
+
+  // Setter for data
+  set data(value: string) {
+    this._data = value;
+  }
+
+  // Getter for inputType
+  get inputType(): string {
+    return this._inputType;
+  }
+
+  // Setter for inputType
+  set inputType(value: string) {
+    this._inputType = value;
+  }
+
+  // Getter for relay
+  get relay(): string {
+    return this._relay;
+  }
+
+  // Setter for relay
+  set relay(value: string) {
+    this._relay = value;
+  }
 }
 
-export function getJobRequestInputData(
+export function getJobRequestInputTag(
   jobRequestEvent: EventTemplate,
-): JobRequestInputData {
+): JobRequestInputTag {
   const inputTag = jobRequestEvent.tags.find((tag) => tag[0] === "i");
   if (!inputTag) {
     throw new Error("No i tag found in the event");
   }
-  const inputData: JobRequestInputData = {
-    data: inputTag[1] ? inputTag[1] : "",
-    inputType: inputTag[2] ? inputTag[2] : "",
-    relay: inputTag[3] ? inputTag[3] : "",
-  };
 
-  return inputData;
+  const jobRequestParams: JobRequestInputTag = new JobRequestInputTag(
+    inputTag[1] ? inputTag[1] : "",
+    inputTag[2] ? inputTag[2] : "",
+    inputTag[3] ? inputTag[3] : "",
+  );
+
+  return jobRequestParams;
 }
 
 export function getJobResultEvent(
   jobRequestEvent: VerifiedEvent,
   payload: string,
 ): EventTemplate {
-  const jobRequestInputData: JobRequestInputData = getJobRequestInputData(
+  const jobRequestInputData: JobRequestInputTag = getJobRequestInputTag(
     jobRequestEvent,
   );
 
