@@ -1,5 +1,4 @@
 import {
-  EventTemplate,
   finalizeEvent,
   getPublicKey,
   SimplePool,
@@ -27,7 +26,6 @@ const pool = new SimplePool();
 // for each plugin, publish a service announcement event for the plugin's capability
 for (const plugin of plugins) {
   const pluginObj = plugin[1];
-  const capability = pluginObj.getCapability();
   const serviceAnnouncementEvent = getServiceAnnouncementEvent(
     pluginObj.getName(),
     pluginObj.getAbout(),
@@ -64,13 +62,15 @@ const handleJobRequest = async (event: VerifiedEvent) => {
       const jobResult = getJobResultEvent(event, result);
       const signedEvent = finalizeEvent(jobResult, sk);
       await Promise.any(pool.publish(appConfig.relays, signedEvent));
+      break;
     }
-    default:
+    default: {
       console.log("Unknown method", jobRequestInputData.method);
+    }
   }
 };
 
-let h = pool.subscribeMany(
+pool.subscribeMany(
   appConfig.relays,
   [
     {
