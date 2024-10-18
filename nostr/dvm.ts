@@ -4,7 +4,7 @@ export function getServiceAnnouncementEvent(
   name: string,
   about: string,
   dvmKind: number,
-  typeTag: string[],
+  serviceAnnouncementTags?: { [key: string]: string[] },
 ): EventTemplate {
   const eventContent = JSON.stringify({
     "name": name,
@@ -16,7 +16,9 @@ export function getServiceAnnouncementEvent(
     content: eventContent,
     tags: [
       ["k", dvmKind.toString()],
-      ["t", ...typeTag],
+      ...Object.entries(serviceAnnouncementTags || {}).map(([key, value]) => {
+        return [key, ...value];
+      }),
     ],
   };
 }

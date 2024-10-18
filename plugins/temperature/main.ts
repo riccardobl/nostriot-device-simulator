@@ -7,15 +7,15 @@ export default class TemperatureSensor {
   }
 
   getCapability(): string {
-    return "getTemperature";
+    return this.config.capability;
   }
 
-  getType(): string {
-    return "temperature";
+  getEventTags(): { [key: string]: string[] } {
+    return this.config.eventTags || {};
   }
 
-  getUnit(): string {
-    return "celsius";
+  getServiceAnnouncementTags(): { [key: string]: string[] } {
+    return this.config.serviceAnnouncementTags || {};
   }
 
   execute(): number {

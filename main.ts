@@ -1,4 +1,4 @@
-import { finalizeEvent, getPublicKey, SimplePool } from "npm:nostr-tools";
+import { finalizeEvent, SimplePool } from "npm:nostr-tools";
 import { hexToBytes } from "npm:@noble/hashes/utils";
 import { loadConfigFile } from "./config.ts";
 import { getServiceAnnouncementEvent } from "./nostr/dvm.ts";
@@ -10,20 +10,18 @@ import { loadPlugins } from "./plugins.ts";
   const plugins = await loadPlugins(appConfig);
 
   const sk = hexToBytes(appConfig.privateKey);
-  const pk = getPublicKey(sk);
+  // const pk = getPublicKey(sk);
 
   const pool = new SimplePool();
 
   // for each plugin, publish a service announcement event for the plugin's capability
   for (const plugin of plugins) {
     const capability = plugin.getCapability();
-    const pluginDataType = plugin.getType();
-    const pluginUnit = plugin.getUnit();
     const serviceAnnouncementEvent = getServiceAnnouncementEvent(
       `A thing with capability: ${capability}`,
       "A simulated IoT DVM",
       5107,
-      [pluginDataType, "unit", pluginUnit],
+      plugin.getServiceAnnouncementTags(),
     );
     const signedEvent = finalizeEvent(serviceAnnouncementEvent, sk);
     console.log("publishing service announcement event...", signedEvent);

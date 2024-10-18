@@ -10,6 +10,9 @@ export interface AppConfig {
 }
 
 export interface PluginConfig {
-  unit?: string;
-  threshold?: number;
+  name: string;
+  about: string;
+  capability: string;
+  eventTags?: { [key: string]: string[] };
+  serviceAnnouncementTags?: { [key: string]: string[] };
 }

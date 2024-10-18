@@ -7,15 +7,15 @@ export default class RunMotor {
   }
 
   getCapability(): string {
-    return "runMotor";
+    return this.config.capability;
   }
 
-  getType(): string {
-    return "duration";
+  getEventTags(): { [key: string]: string[] } {
+    return this.config.eventTags || {};
   }
 
-  getUnit(): string {
-    return "seconds";
+  getServiceAnnouncementTags(): { [key: string]: string[] } {
+    return this.config.serviceAnnouncementTags || {};
   }
 
   execute(params: (string | number)[] = []): string {
