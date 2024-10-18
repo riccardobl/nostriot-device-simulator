@@ -1,9 +1,18 @@
 import { PluginConfig } from "../../types.ts";
+
 export default class TemperatureSensor {
   config: PluginConfig;
 
   constructor(config: PluginConfig) {
     this.config = config;
+  }
+
+  getName(): string {
+    return this.config.name;
+  }
+
+  getAbout(): string {
+    return this.config.about;
   }
 
   getCapability(): string {

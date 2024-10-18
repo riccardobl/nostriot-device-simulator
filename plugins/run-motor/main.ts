@@ -6,6 +6,14 @@ export default class RunMotor {
     this.config = config;
   }
 
+  getName(): string {
+    return this.config.name;
+  }
+
+  getAbout(): string {
+    return this.config.about;
+  }
+
   getCapability(): string {
     return this.config.capability;
   }
