@@ -1,10 +1,10 @@
 import { AppConfig } from "./types.ts";
 import { loadConfigFile } from "./config.ts";
-import { loadPlugins } from "./plugins.ts";
+import { getPlugins } from "./plugins.ts";
 
 (async () => {
   const config = await loadConfigFile("./config.json") as AppConfig;
-  const plugins = await loadPlugins(config);
+  const plugins = await getPlugins(config);
 
   for (const plugin of plugins) {
     const capability = plugin.getCapability();

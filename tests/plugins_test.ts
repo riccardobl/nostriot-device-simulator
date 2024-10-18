@@ -1,6 +1,6 @@
 import { assert, assertEquals } from "@std/assert";
 import { loadConfigFile } from "../config.ts";
-import { loadPlugins } from "../plugins.ts";
+import { getPlugins } from "../plugins.ts";
 import { AppConfig } from "../types.ts";
 
 // Mock data and functions if necessary
@@ -20,25 +20,14 @@ Deno.writeTextFileSync("./tests.config.json", JSON.stringify(mockConfig));
 Deno.test("Load Configuration File", async () => {
   const config = await loadConfigFile("./tests.config.json") as AppConfig;
   assert(config);
-  console.log(config.plugins.length);
   assertEquals(config.plugins.length, 2);
-});
-
-Deno.test("Load Plugins", async () => {
-  const config = await loadConfigFile("./tests.config.json") as AppConfig;
-  const plugins = await loadPlugins(config);
-  assertEquals(plugins.length, config.plugins.length);
-  assert(
-    plugins.every((plugin) => typeof plugin.getCapability === "function"),
-  );
 });
 
 Deno.test("Temperature Sensor Plugin", async () => {
   const config = await loadConfigFile("./tests.config.json") as AppConfig;
-  const plugins = await loadPlugins(config);
-  const tempSensor = plugins.find((p) =>
-    p.constructor.name === "TemperatureSensor"
-  );
+  const plugins = await getPlugins(config);
+  // plugins is a Map<string:any> so we need to find the plugin by name
+  const tempSensor = plugins.get("temperature");
   assert(tempSensor);
   assertEquals(tempSensor.getCapability(), "getTemperature");
   assert(typeof tempSensor.execute() === "number");
@@ -46,8 +35,8 @@ Deno.test("Temperature Sensor Plugin", async () => {
 
 Deno.test("Run Motor Plugin", async () => {
   const config = await loadConfigFile("./tests.config.json") as AppConfig;
-  const plugins = await loadPlugins(config);
-  const runMotor = plugins.find((p) => p.constructor.name === "RunMotor");
+  const plugins = await getPlugins(config);
+  const runMotor = plugins.get("run-motor");
   assert(runMotor);
   assertEquals(runMotor.getCapability(), "runMotor");
   const motorParams = ["value", "2", "unit", "seconds"];

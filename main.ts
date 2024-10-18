@@ -8,17 +8,13 @@ import { hexToBytes } from "npm:@noble/hashes/utils";
 import { loadConfigFile } from "./config.ts";
 import { getServiceAnnouncementEvent } from "./nostr/dvm.ts";
 import { AppConfig } from "./types.ts";
-import { loadPlugins } from "./plugins.ts";
+import { getPlugins } from "./plugins.ts";
 
 const appConfig = await loadConfigFile("./config.json") as AppConfig;
-const plugins = await loadPlugins(appConfig);
+const plugins = await getPlugins(appConfig);
 
 const sk = hexToBytes(appConfig.privateKey);
 const pk = getPublicKey(sk);
-
-console.log("Public key:", pk);
-
-const pool = new SimplePool();
 
 // for each plugin, publish a service announcement event for the plugin's capability
 // for (const plugin of plugins) {
@@ -48,6 +44,8 @@ const pool = new SimplePool();
 //   // }
 // }
 
+// TODO: Load plugins into persistent vars
+
 /**
  * Handle a DVM job request
  * @param event
@@ -62,6 +60,7 @@ const handleJobRequest = async (event: EventTemplate) => {
   // TODO: Push this request into a plugin and send the plug exec output as a DVM job response
 };
 
+const pool = new SimplePool();
 let h = pool.subscribeMany(
   appConfig.relays,
   [
