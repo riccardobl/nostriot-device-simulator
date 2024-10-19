@@ -1,18 +1,18 @@
-export interface PluginInfo {
-  name: string;
-  path: string;
+import { IoTDeviceMeta } from "./src/IoTDevice.ts";
+export interface DeviceInfo {
+    name: string;
+    path: string;
+    privkey?: string;
 }
 
 export interface AppConfig {
-  privateKey: string;
-  relays: string[];
-  plugins: PluginInfo[];
+    dataStore?: string;
+    relays: string[];
+    devices: DeviceInfo[];
+    groups?: string[]; // list of private keys of the groups to join
+    debugMode?:boolean
 }
 
-export interface PluginConfig {
-  name: string;
-  about: string;
-  capability: string;
-  eventTags?: { [key: string]: string[] };
-  serviceAnnouncementTags?: { [key: string]: string[] };
-}
+export type DeviceConfig = IoTDeviceMeta & {
+    schema: string;
+};

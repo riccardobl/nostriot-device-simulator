@@ -1,0 +1,15 @@
+{
+  
+  "name": "run-motor",
+  "about": "A simulated IoT DVM that can run an imaginary motor",
+  "tags": ["motor"],
+  "groups": [],
+  "schema": {
+    "actions": {
+
+    },
+    "states":{
+
+    }
+  }
+}

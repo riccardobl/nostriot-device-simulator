@@ -1,8 +1,0 @@
-{
-  "privateKey": "[PRIVATE_KEY_HEX]",
-  "relays": ["wss://relay.nostriot.com"],
-  "plugins": [
-    { "name": "temperature", "path": "./plugins/temperature/main.ts" },
-    { "name": "run-motor", "path": "./plugins/run-motor/main.ts" }
-  ]
-}

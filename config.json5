@@ -1,0 +1,7 @@
+{
+  "relays": ["wss://nostr.rblb.it:7777"],
+  "devices": [
+    { "name": "run-motor", "path": "./devices/run-motor/main.ts" }
+  ],
+  "dataStore": "./data"
+}
